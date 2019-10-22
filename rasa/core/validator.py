@@ -2,7 +2,7 @@ import logging
 import asyncio
 from collections import defaultdict
 from typing import List, Set, Text
-from rasa.core.domain import Domain
+from rasa.core.domain import Domain, InvalidDomain
 from rasa.importers.importer import TrainingDataImporter
 from rasa.nlu.training_data import TrainingData
 from rasa.core.training.dsl import StoryStep
@@ -27,7 +27,13 @@ class Validator(object):
     async def from_importer(cls, importer: TrainingDataImporter) -> "Validator":
         """Create an instance from the domain, nlu and story files."""
 
-        domain = await importer.get_domain()
+        try:
+            domain = await importer.get_domain()
+        except InvalidDomain as e:
+            logger.info("Exiting early...")
+
+            exit(1)
+
         stories = await importer.get_stories()
         intents = await importer.get_nlu_data()
 
@@ -200,3 +206,13 @@ class Validator(object):
         logger.info("Validating utterances...")
         stories_are_valid = self.verify_utterances_in_stories(ignore_warnings)
         return intents_are_valid and stories_are_valid and there_is_no_duplication
+
+    def verify_domain_is_empty(self) -> bool:
+        """Checks if the domain is empty."""
+        return self.domain.is_empty()
+
+    def verify_domain(self) -> bool:
+        """ Runs the validations on domain."""
+
+        is_valid = self.verify_domain_is_empty()
+        return is_valid

@@ -103,5 +103,8 @@ def validate_files(args):
     )
 
     validator = loop.run_until_complete(Validator.from_importer(file_importer))
+    domain_is_alright = validator.verify_domain()
+    sys.exit(0) if domain_is_alright else sys.exit(1)
+
     everything_is_alright = validator.verify_all(not args.fail_on_warnings)
     sys.exit(0) if everything_is_alright else sys.exit(1)
