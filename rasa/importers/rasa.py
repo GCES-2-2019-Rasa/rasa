@@ -70,5 +70,6 @@ class RasaFileImporter(TrainingDataImporter):
                     self._domain_path, e.message
                 )
             )
+            raise
 
         return domain
