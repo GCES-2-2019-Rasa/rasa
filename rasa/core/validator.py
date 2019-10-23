@@ -203,6 +203,7 @@ class Validator(object):
 
     def verify_domain_is_empty(self) -> bool:
         """Checks if the domain is empty."""
+
         return self.domain.is_empty()
 
     def verify_domain(self) -> bool:
