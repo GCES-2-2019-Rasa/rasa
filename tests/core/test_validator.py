@@ -1,4 +1,5 @@
 import pytest
+import os
 from rasa.core.validator import Validator
 from rasa.importers.rasa import RasaFileImporter
 from tests.core.conftest import (
@@ -86,6 +87,26 @@ async def test_verify_logging_message_for_repetition_in_intents(caplog):
         + "multiples intents: goodbye, greet"
         == message
     )
+
+
+async def test_verify_domain_is_empty(caplog):
+    domain_path = "data/test_domains/duplicate_intent.yml"
+    full_path = os.path.abspath(domain_path)
+
+    importer = RasaFileImporter(
+        domain_path=domain_path
+    )
+    validator = await Validator.from_importer(importer)
+    validator.verify_domain_is_empty()
+
+    log_object = caplog.records[-1]
+    message = log_object.message
+    level = log_object.levelname
+
+    assert "WARNING" == level
+    assert ("Loading domain from '{}' failed. Using empty domain. "
+            "Error: 'Failed to load domain specification from '{}'. "
+            "File not found!'".format(domain_path, full_path) == message)
 
 
 async def test_verify_there_is_not_example_repetition_in_intents():
