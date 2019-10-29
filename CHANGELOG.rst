@@ -14,6 +14,7 @@ This project adheres to `Semantic Versioning`_ starting with version 1.0.
 Added
 -----
 - Added data validator that checks if domain object returned is empty. If so, exit early from the command ``rasa data validate``
+- Added the KeywordIntentClassifier
 
 Changed
 -------
@@ -24,15 +25,11 @@ Removed
 Fixed
 -----
 - ``MultiProjectImporter`` now imports files in the order of the import statements
+- Fixed server hanging forever on leaving ``rasa shell`` before first message
 
-[Unreleased 1.4.2]
-~~~~~~~~~~~~~~~~~~
 
-Added
------
-
-Changed
--------
+[1.4.2] - 2019-10-28
+^^^^^^^^^^^^^^^^^^^^
 
 Removed
 -------
@@ -42,6 +39,7 @@ Fixed
 -----
 - Fixed ``'Namespace' object has no attribute 'persist_nlu_data'`` error during
   interactive learning
+- Pinned `networkx~=2.3.0` to fix visualization in `rasa interactive` and Rasa X
 
 [1.4.1] - 2019-10-22
 ^^^^^^^^^^^^^^^^^^^^
