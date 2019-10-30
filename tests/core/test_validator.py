@@ -90,7 +90,7 @@ async def test_verify_logging_message_for_repetition_in_intents(caplog):
 
 
 async def test_verify_domain_is_empty(caplog):
-    domain_path = "data/test_domains/duplicate_intent.yml"
+    domain_path = "data/test_domains/duplicate_intents.yml"
     full_path = os.path.abspath(domain_path)
 
     importer = RasaFileImporter(domain_path=domain_path)
@@ -104,8 +104,11 @@ async def test_verify_domain_is_empty(caplog):
     assert "WARNING" == level
     assert (
         "Loading domain from '{}' failed. Using empty domain. "
-        "Error: 'Failed to load domain specification from '{}'. "
-        "File not found!'".format(domain_path, full_path) == message
+        "Error: 'Intents are not unique! Found two intents with name "
+        "'default'. Either rename or remove one of them.'".format(
+            domain_path, full_path
+        )
+        == message
     )
 
 
