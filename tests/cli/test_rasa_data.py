@@ -1,6 +1,10 @@
 import os
+import pytest
+from collections import namedtuple
 from typing import Callable
 from _pytest.pytester import RunResult
+from rasa.cli.data import validate_files
+from rasa.constants import DEFAULT_CONFIG_PATH, DEFAULT_DOMAIN_PATH, DEFAULT_DATA_PATH
 
 
 def test_data_split_nlu(run_in_default_project: Callable[..., RunResult]):
@@ -63,3 +67,12 @@ def test_data_validate_help(run: Callable[..., RunResult]):
 
     for i, line in enumerate(lines):
         assert output.outlines[i] == line
+
+
+def test_validate_files_exit_early():
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        args = {"domain": "data/test_domains/empty_utterance.yml", "data": None}
+        validate_files(namedtuple("Args", args.keys())(*args.values()))
+
+    assert pytest_wrapped_e.type == SystemExit
+    assert pytest_wrapped_e.value.code == 1

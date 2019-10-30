@@ -208,5 +208,5 @@ class Validator:
     def verify_domain(self) -> bool:
         """ Runs the validations on domain."""
 
-        is_valid = self.verify_domain_is_empty()
+        is_valid = not self.verify_domain_is_empty()
         return is_valid
